@@ -15,7 +15,7 @@ async function getUrl(url, i) {
     await delay(i * 1000)
 
     try {
-        const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug}`)
+        const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug[1]}`)
         const full = await resp.json()
         const main = full.data[0]
         return `${main.slug}, ${main.japanese[0].reading} -> ${main.senses[0].english_definitions.join(" | ")}`
