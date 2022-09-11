@@ -18,9 +18,10 @@ async function getUrl(url, i) {
         const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug}`)
         const full = await resp.json()
         const main = full.data[0]
-        return `${main.slug}, ${main.senses[0].english_definitions.join(", ")}`
+        return `${main.slug}, ${main.japanese[0].reading} -> ${main.senses[0].english_definitions.join(" | ")}`
     }
     catch (e) {
+        console.error(e)
         return ""
     }
 }
