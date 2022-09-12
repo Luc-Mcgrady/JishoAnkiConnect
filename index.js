@@ -1,5 +1,3 @@
-const urls = example.split("\n").filter(a=>a!="")
-
 function delay(t = delay_ms) {
     return new Promise(resolve => {
         setTimeout(resolve, t);
@@ -28,7 +26,7 @@ async function getUrl(url, i) {
     if (!slug)
         return
 
-    getSlug(slug[1], i)
+    return await getSlug(slug[1], i)
 }
 
 
