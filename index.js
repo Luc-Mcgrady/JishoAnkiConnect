@@ -13,7 +13,7 @@ async function getSlug(slug, i) {
         const full = await resp.json()
         const main = full.data[0]
         
-        const senses = main.senses.map(sense=>sense.english_definitions.join(" | ").replace(",", "..")).join("\n")
+        const senses = main.senses.map(sense=>sense.english_definitions.join(" | ").replace(",", "..")).join("<br/>")
 
         return `${main.slug}, ${main.japanese[0].reading}, ${senses}`
     }
