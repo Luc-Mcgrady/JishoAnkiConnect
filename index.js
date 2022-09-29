@@ -12,7 +12,10 @@ async function getSlug(slug, i) {
         const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug}`)
         const full = await resp.json()
         const main = full.data[0]
-        return `${main.slug}, ${main.japanese[0].reading} -> ${main.senses[0].english_definitions.join(" | ")}`
+        
+        const senses = main.senses.map(sense=>sense.english_definitions.join(" | ")).join("<br/>")
+
+        return `${main.slug}, ${main.japanese[0].reading}, ${senses}`
     }
     catch (e) {
         console.error(e)
@@ -30,7 +33,9 @@ async function getUrl(url, i) {
 }
 
 
-async function main() {
+async function loadFromBookmarks(csv) {
+    csv.split("\n")
+
 	const requests = slugs.map(getSlug)
     const resp = await Promise.all(requests)
 
