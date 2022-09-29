@@ -13,7 +13,7 @@ async function getSlug(slug, i) {
         const full = await resp.json()
         const main = full.data[0]
         
-        const senses = main.senses.map(sense=>sense.english_definitions.join(" | ")).join("<br/>")
+        const senses = main.senses.map(sense=>sense.english_definitions.join(" | ").replace(",", "")).join("\n")
 
         return `${main.slug}, ${main.japanese[0].reading}, ${senses}`
     }
@@ -34,7 +34,7 @@ async function getUrl(url, i) {
 
 
 async function loadFromBookmarks(csv) {
-    csv.split("\n")
+    const slugs = csv.split("\n")
 
 	const requests = slugs.map(getSlug)
     const resp = await Promise.all(requests)
