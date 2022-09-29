@@ -33,7 +33,7 @@ async function getUrl(url, i) {
 }
 
 
-async function loadFromBookmarks(csv) {
+async function loadFromBookmarks(urls) {
     const slugs = csv.split("\n")
 
 	const requests = slugs.map(getSlug)
@@ -41,5 +41,3 @@ async function loadFromBookmarks(csv) {
 
     console.log(resp.join("\n"))
 }
-
-main()
