@@ -33,13 +33,11 @@ async function getUrl(url, i) {
 }
 
 
-async function loadFromBookmarks(csv) {
-    const slugs = csv.split("\n")
+async function loadFromBookmarks(urls) {
+    const slugs = urls.split("\n")
 
 	const requests = slugs.map(getSlug)
     const resp = await Promise.all(requests)
 
     console.log(resp.join("\n"))
 }
-
-main()
