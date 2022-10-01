@@ -1,17 +1,17 @@
-function delay(t = delay_ms) {
+export function delay(t: number) {
     return new Promise(resolve => {
         setTimeout(resolve, t);
     });
 }
 
-async function getSlugJson(slug) {
+export async function getSlugJson(slug: string) {
     const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug}`)
     const full = await resp.json()
     
     return full;
 }
 
-async function getSlugCsv(slug) {
+export async function getSlugCsv(slug: string) {
     try {
         const json = await getSlugJson(slug)
         const main = json.data[0]
@@ -26,7 +26,7 @@ async function getSlugCsv(slug) {
     }
 }
 
-async function getUrl(url) {
+export async function getUrl(url: string) {
     const slug = url.match(/https:\/\/jisho\.org\/search\/([%A-F0-9]+)$/)
 
     if (!slug)
@@ -37,10 +37,10 @@ async function getUrl(url) {
 
 const wait = 1000 // Wait in ms
 
-async function loadFromBookmarks(urls) {
+export async function loadFromBookmarks(urls: string) {
     const urlarr = urls.split("\n")
 
-    async function attempt(url,max=2,_current=0) {
+    async function attempt(url: string,max=2,_current=0) {
         await delay(wait)
 
         const result = await getUrl(url)
@@ -48,15 +48,15 @@ async function loadFromBookmarks(urls) {
         if(result) {
             return result
         }
-        else if (max > current) {
+        else if (max > _current) {
             return await attempt(url,max,_current+1) 
         }
         else {
-            console.error(`${url} Failed after ${current} retrys`)
+            console.error(`${url} Failed after ${_current} retrys`)
         }
     }
     
-    let resp = []
+    let resp = [] as string[]
 	for (const url of urlarr) {
         resp.push(await attempt(url))
     }

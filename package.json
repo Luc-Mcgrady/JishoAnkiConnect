@@ -1,0 +1,22 @@
+{
+  "name": "jishobookmarks",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "tsup src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luc-mcgrady/JishoBookmarks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Luc-mcgrady/JishoBookmarks/issues"
+  },
+  "homepage": "https://github.com/Luc-mcgrady/JishoBookmarks#readme",
+  "devDependencies": {
+    "tsup": "^6.2.3"
+  }
+}
