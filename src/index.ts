@@ -1,29 +1,22 @@
 import yargs from "yargs"
 
 yargs(process.argv.splice(2))
-    .scriptName("JishoToCsv")
-    .command("words", "Get csv from words", 
-    (yargs)=>{
-        return yargs.option("words", {
-            alias: "words",
-            type: "array",
-            describe: "A list of words to get the csv for"
-        })
-    },
-    (argv)=>{
-        console.log("To be implemented", argv.words)
+    .scriptName("jishocsv")
+    .array("word-list")
+    .array("url-list")
+    .command({
+        command: "words [word-list]",
+        describe: "Get csv from words",
+        handler: (argv)=>{
+            console.log("To be implemented", argv["word-list"])
+        },
     })
-    .command("urls", "Get csv from jisho urls",
-    (yargs)=>{
-        return yargs.option("urls", {
-            alias: "urls",
-            type: "array",
-            describe: "A list of urls to get the csv for"
-        })
-    },
-    (argv)=>{
-        console.log("To be implemented", argv.urls)
+    .command({
+        command: "urls [url-list]",
+        describe: "Get csv from jisho urls",
+        handler: (argv)=>{
+            console.log("To be implemented", argv["url-list"])
+        },
     })
-    
+    .help()
     .argv
-    
