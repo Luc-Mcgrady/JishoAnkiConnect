@@ -4,9 +4,7 @@ function delay(t = delay_ms) {
     });
 }
 
-async function getSlug(slug, i) {
-    
-    await delay(i * 1000)
+async function getSlug(slug) {
 
     try {
         const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug}`)
@@ -23,21 +21,40 @@ async function getSlug(slug, i) {
     }
 }
 
-async function getUrl(url, i) {
+async function getUrl(url) {
     const slug = url.match(/https:\/\/jisho\.org\/search\/([%A-F0-9]+)$/)
 
     if (!slug)
         return
 
-    return await getSlug(slug[1], i)
+    return await getSlug(slug[1])
 }
 
+const wait = 1000 // Wait in ms
 
 async function loadFromBookmarks(urls) {
-    const slugs = urls.split("\n")
+    const urlarr = urls.split("\n")
 
-	const requests = slugs.map(getSlug)
-    const resp = await Promise.all(requests)
+    async function attempt(url,max=2,_current=0) {
+        await delay(wait)
+
+        const result = await getUrl(url)
+
+        if(result) {
+            return result
+        }
+        else if (max > current) {
+            return await attempt(url,max,_current+1) 
+        }
+        else {
+            console.error(`${url} Failed after ${current} retrys`)
+        }
+    }
+    
+    let resp = []
+	for (const url of urlarr) {
+        resp.push(await attempt(url))
+    }
 
     console.log(resp.join("\n"))
 }
