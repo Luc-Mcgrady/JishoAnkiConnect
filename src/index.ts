@@ -1,14 +1,11 @@
 import yargs from "yargs"
 import { loadFromArray } from "./jisho/csv"
-
-const slugsConfig = {
-
-}
+import { extractSlug } from "./jisho/slug"
 
 yargs(process.argv.splice(2))
     .scriptName("jishocsv")
     .command(
-        "words [word-list...]",
+        "$0 [word-list...]",
         "Get csv from words",
         {
             slugs: {
@@ -18,16 +15,12 @@ yargs(process.argv.splice(2))
             }
         },
         (argv)=>{
-            console.log(argv.slugs)
+            const slugs = argv.slugs.map(extractSlug).filter(e=>!!e)
+
+            console.log(slugs)
+
             loadFromArray(argv.slugs.map(e=>e.toString()))
         },    
     )
-    .command({
-        command: "urls [url-list]",
-        describe: "Get csv from jisho urls",
-        handler: (argv)=>{
-            console.log("To be implemented", argv["url-list"])
-        },
-    })
     .help()
     .argv

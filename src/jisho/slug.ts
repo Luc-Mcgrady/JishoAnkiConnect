@@ -13,7 +13,7 @@ export function extractSlug(url: string) {
     const slug = url.match(/https:\/\/jisho\.org\/search\/([%A-F0-9]+)$/)
 
     if (!slug)
-        return
+        return url // IF it fails to extract anything return the input
 
     return slug[1]
 }
