@@ -4,12 +4,17 @@ function delay(t = delay_ms) {
     });
 }
 
-async function getSlug(slug) {
+async function getSlugJson(slug) {
+    const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug}`)
+    const full = await resp.json()
+    
+    return full;
+}
 
+async function getSlugCsv(slug) {
     try {
-        const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug}`)
-        const full = await resp.json()
-        const main = full.data[0]
+        const json = await getSlugJson(slug)
+        const main = json.data[0]
         
         const senses = main.senses.map(sense=>sense.english_definitions.join(" | ").replace(",", "..")).join("<br/>")
 
@@ -27,7 +32,7 @@ async function getUrl(url) {
     if (!slug)
         return
 
-    return await getSlug(slug[1])
+    return await getSlugCsv(slug[1])
 }
 
 const wait = 1000 // Wait in ms
