@@ -5,7 +5,7 @@
   "main": "dist",
   "scripts": {
     "build": "tsup src/index.ts",
-    "run": "node dist/index.js",
+    "test": "node dist/index.js words kensa",
     "help": "node dist/index.js --help"
   },
   "repository": {
