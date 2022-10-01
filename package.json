@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist",
   "scripts": {
-    "build": "tsup src/index.ts",
+    "dev": "tsup src/index.ts --watch",
+    "build": "tsup src/index.ts --minify",
     "test": "node dist/index.js kensa tamesu",
     "help": "node dist/index.js --help"
   },
