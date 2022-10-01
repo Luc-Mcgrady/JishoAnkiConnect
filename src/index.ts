@@ -1,14 +1,17 @@
 import yargs from "yargs"
+import { loadFromArray } from "./jisho/csv"
 
 yargs(process.argv.splice(2))
     .scriptName("jishocsv")
-    .array("word-list")
-    .array("url-list")
+    .array("slugs")
+    .alias("slugs", "word-list")
+    .alias("slugs", "url-list")
     .command({
-        command: "words [word-list]",
+        command: "words [word-list...]",
         describe: "Get csv from words",
         handler: (argv)=>{
-            console.log("To be implemented", argv["word-list"])
+            console.log(argv.slugs)
+            loadFromArray(argv.slugs as string[])
         },
     })
     .command({

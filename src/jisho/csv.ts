@@ -16,39 +16,29 @@ export async function getSlugCsv(slug: string) {
     }
 }
 
-export async function getUrlCsv(url: string) {
-    const slug = url.match(/https:\/\/jisho\.org\/search\/([%A-F0-9]+)$/)
-
-    if (!slug)
-        return
-
-    return await getSlugCsv(slug[1])
-}
-
 const wait = 1000 // Wait in ms
 
-export async function loadFromBookmarks(urls: string) {
-    const urlarr = urls.split("\n")
+export async function loadFromArray(slugs: string[]) {
 
-    async function attempt(url: string,max=2,_current=0) {
+    async function attempt(slug: string,max=2,_current=0) {
         await delay(wait)
 
-        const result = await getUrlCsv(url)
+        const result = await getSlugCsv(slug)
 
         if(result) {
             return result
         }
-        else if (max > _current) {
-            return await attempt(url,max,_current+1) 
+        else if (max > _current) { // Repeat until max repeats
+            return await attempt(slug,max,_current+1) 
         }
         else {
-            console.error(`${url} Failed after ${_current} retrys`)
+            console.error(`${slug} Failed after ${_current} retrys`)
         }
     }
     
     let resp = [] as string[]
-	for (const url of urlarr) {
-        resp.push(await attempt(url))
+	for (const slug of slugs) {
+        resp.push(await attempt(slug))
     }
 
     console.log(resp.join("\n"))

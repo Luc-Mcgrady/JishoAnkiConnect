@@ -8,3 +8,12 @@ export default async function getSlugJson(slug: string) : Promise<JishoWord> {
     
     return full;
 }
+
+export function extractSlug(url: string) {
+    const slug = url.match(/https:\/\/jisho\.org\/search\/([%A-F0-9]+)$/)
+
+    if (!slug)
+        return
+
+    return slug[1]
+}
