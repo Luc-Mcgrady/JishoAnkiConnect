@@ -6,9 +6,18 @@ export async function getSlugCsv(slug: string) {
         const json = await getSlugJson(slug)
         const main = json.data[0]
         
-        const senses = main.senses.map(sense=>sense.english_definitions.join(" | ").replace(",", "..")).join("<br/>")
+        const senses = main.senses.map(
+            sense=>
+            `${
+            sense.english_definitions
+                .join(" | ")
+                .replace(",", "..") 
+            }
+            (<small>${sense.parts_of_speech}</small>)`
+            )
+            .join("<br/>")
 
-        return `${main.slug}, ${main.japanese[0].reading}, ${senses}`
+        return `${main.slug},${main.japanese[0].reading},${senses}`
     }
     catch (e) {
         console.error(e)
