@@ -1,5 +1,5 @@
 import yargs, { describe } from "yargs"
-import { loadFromArray } from "./jisho/csv"
+import { loadFromArray } from "./jisho/tsv"
 import { extractSlug } from "./jisho/slug"
 import fs from "fs/promises"
 import cliProgress from "cli-progress"
@@ -15,11 +15,13 @@ async function GetWords(slugs: string[], outfile: string) {
     const data = await loadFromArray(slugs.map(e=>e.toString()), (i)=>bar.update(i))
     bar.stop()
 
+    const csv = data.join('\n')
+
     if (outfile) {
-        await fs.writeFile(outfile, data)
+        await fs.writeFile(outfile, csv)
     }
     else {
-        console.log(data)
+        console.log(csv)
     }
 }
 

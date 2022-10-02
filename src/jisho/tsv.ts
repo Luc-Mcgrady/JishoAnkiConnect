@@ -8,16 +8,14 @@ export async function getSlugCsv(slug: string) {
         
         const senses = main.senses.map(
             sense=>
-            `${
-            sense.english_definitions
-                .join(" | ")
-                .replace(",", "..") 
-            }
-            (<small>${sense.parts_of_speech}</small>)`
+`${
+sense.english_definitions
+    .join(" | ")
+}(<small>${sense.parts_of_speech}</small>)`
             )
-            .join("<br/>")
+            .join("\<br/\>")
 
-        return `${main.slug},${main.japanese[0].reading},${senses}`
+        return `${main.slug}\t${main.japanese[0].reading}\t${senses}`
     }
     catch (e) {
         console.error(e)
@@ -54,6 +52,6 @@ export async function loadFromArray(
         resp.push(await attempt(slug))
         progress(++i)
     }
-    
+
     return resp
 }
