@@ -62,7 +62,7 @@ yargs(process.argv.splice(2))
             const words = [...wordMatches].map(a=>a[1])
             console.log({file, filestring, wordMatches, words})
 
-            GetWords(words, argv.o)
+            GetWords(words, argv.o as any)
         }
     )
     .demandCommand()
