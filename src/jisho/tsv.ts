@@ -11,7 +11,7 @@ export async function getSlugCsv(slug: string) {
 `${
 sense.english_definitions
     .join(" | ")
-}(<small>${sense.parts_of_speech}</small>)`
+}<small>(${sense.parts_of_speech})</small>`
             )
             .join("\<br/\>")
 
