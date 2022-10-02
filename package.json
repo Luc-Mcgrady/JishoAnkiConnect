@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsup src/index.ts --watch",
     "build": "tsup src/index.ts --minify",
-    "test": "node dist/index.js kensa tamesu",
+    "test": "node dist/index.js words kensa tamesu -o dist/test.txt",
     "help": "node dist/index.js --help"
   },
   "repository": {

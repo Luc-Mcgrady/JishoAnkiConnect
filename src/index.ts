@@ -1,10 +1,10 @@
-import yargs from "yargs"
+import yargs, { describe } from "yargs"
 import { loadFromArray } from "./jisho/csv"
 import { extractSlug } from "./jisho/slug"
 import fs from "fs/promises"
 import cliProgress from "cli-progress"
 
-async function GetWords(slugs: string[]) {
+async function GetWords(slugs: string[], outfile: string) {
     slugs = slugs.map(extractSlug)
 
     console.log(slugs)
@@ -12,14 +12,26 @@ async function GetWords(slugs: string[]) {
     const bar = new cliProgress.Bar({}, cliProgress.Presets.shades_classic)
     
     bar.start(slugs.length, 0)
-    await loadFromArray(slugs.map(e=>e.toString()), (i)=>bar.update(i))
+    const data = await loadFromArray(slugs.map(e=>e.toString()), (i)=>bar.update(i))
     bar.stop()
+
+    if (outfile) {
+        await fs.writeFile(outfile, data)
+    }
+    else {
+        console.log(data)
+    }
 }
 
 yargs(process.argv.splice(2))
     .scriptName("jishocsv")
+    .option("o", {
+        alias: "out",
+        type: "string",
+        describe: "The file to output to. If left blank logs at end"
+    })
     .command(
-        "$0 <word-list...>",
+        "words <word-list...>",
         "Get csv from words or urls",
         {
             slugs: {
@@ -29,7 +41,7 @@ yargs(process.argv.splice(2))
             }
         },
         (argv)=>{
-            GetWords(argv.slugs)
+            GetWords(argv.slugs, argv.o as any)
         },    
     )
     .command(
@@ -49,8 +61,11 @@ yargs(process.argv.splice(2))
 
             const words = [...wordMatches].map(a=>a[1])
             console.log({file, filestring, wordMatches, words})
-            GetWords(words)
+
+            GetWords(words, argv.o)
         }
     )
+    .demandCommand()
+    .showHelpOnFail(true)
     .help()
     .argv
