@@ -27,7 +27,10 @@ export async function getSlugCsv(slug: string) {
 
 const wait = 1000 // Wait in ms
 
-export async function loadFromArray(slugs: string[]) {
+export async function loadFromArray(
+    slugs: string[], 
+    progress: (amt: number) => void = ()=>{}
+) {
 
     async function attempt(slug: string,max=2,_current=0) {
         await delay(wait)
@@ -44,11 +47,13 @@ export async function loadFromArray(slugs: string[]) {
             console.error(`${slug} Failed after ${_current} retrys`)
         }
     }
-    
+
     let resp = [] as string[]
+    let i = 0;
 	for (const slug of slugs) {
         resp.push(await attempt(slug))
+        progress(++i)
     }
-
-    console.log(resp.join("\n"))
+    
+    return resp
 }

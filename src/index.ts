@@ -2,13 +2,18 @@ import yargs from "yargs"
 import { loadFromArray } from "./jisho/csv"
 import { extractSlug } from "./jisho/slug"
 import fs from "fs/promises"
+import cliProgress from "cli-progress"
 
-function GetWords(slugs: string[]) {
+async function GetWords(slugs: string[]) {
     slugs = slugs.map(extractSlug)
 
     console.log(slugs)
 
-    loadFromArray(slugs.map(e=>e.toString()))
+    const bar = new cliProgress.Bar({}, cliProgress.Presets.shades_classic)
+    
+    bar.start(slugs.length, 0)
+    await loadFromArray(slugs.map(e=>e.toString()), (i)=>bar.update(i))
+    bar.stop()
 }
 
 yargs(process.argv.splice(2))
