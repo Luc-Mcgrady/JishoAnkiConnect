@@ -18,7 +18,6 @@ sense.english_definitions
         return `${main.slug}\t${main.japanese[0].reading}\t${senses}`
     }
     catch (e) {
-        console.error(e)
         return ""
     }
 }
