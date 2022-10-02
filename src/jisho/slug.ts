@@ -9,7 +9,7 @@ export default async function getSlugJson(slug: string) : Promise<JishoResponse>
 }
 
 export function extractSlug(url: string) {
-    const slug = url.match(/https:\/\/jisho\.org\/search\/([%A-Za-z0-9]+)$)$/)
+    const slug = url.match(/https:\/\/jisho\.org\/search\/([%A-Za-z0-9]+)$/)
 
     if (!slug)
         return url // IF it fails to extract anything return the input

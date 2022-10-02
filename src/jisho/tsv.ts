@@ -22,7 +22,7 @@ sense.english_definitions
     }
 }
 
-const wait = 1000 // Wait in ms
+const wait = 700 // Wait in ms
 
 export async function loadFromArray(
     slugs: string[], 
