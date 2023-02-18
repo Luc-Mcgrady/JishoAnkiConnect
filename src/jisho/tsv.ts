@@ -30,14 +30,13 @@ export async function loadFromArray(
 ) {
 
     async function attempt(slug: string,max=2,_current=0) : Promise<string> {
-        await delay(wait)
-
         const result = await getSlugCsv(slug)
 
         if(result) {
             return result
         }
         else if (max > _current) { // Repeat until max repeats
+            await delay(wait)
             return await attempt(slug,max,_current+1) 
         }
         else {
