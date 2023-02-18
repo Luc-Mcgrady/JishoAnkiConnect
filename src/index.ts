@@ -8,7 +8,7 @@ async function GetWords(slugs: string[], outfile: string) {
 
     console.log(slugs)
 
-    const bar = new ProgressBar({title: "fetched"})
+    const bar = new ProgressBar({title: "fetched", total: slugs.length})
     
     const data = await loadFromArray(slugs.map(e=>e.toString()), (i: number)=>bar.render(i))
 
