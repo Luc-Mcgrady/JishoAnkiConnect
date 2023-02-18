@@ -1,31 +1,29 @@
-import yargs, { describe } from "yargs"
-import { loadFromArray } from "./jisho/tsv"
-import { extractSlug } from "./jisho/slug"
-import fs from "fs/promises"
-import cliProgress from "cli-progress"
+import yargs from 'https://deno.land/x/yargs/deno.ts'
+import { loadFromArray } from "./jisho/tsv.ts"
+import { extractSlug } from "./jisho/slug.ts"
+import ProgressBar from "https://deno.land/x/progress@v1.3.6/mod.ts"
 
 async function GetWords(slugs: string[], outfile: string) {
     slugs = slugs.map(extractSlug)
 
     console.log(slugs)
 
-    const bar = new cliProgress.Bar({}, cliProgress.Presets.shades_classic)
+    const bar = new ProgressBar({title: "fetched"})
     
-    bar.start(slugs.length, 0)
-    const data = await loadFromArray(slugs.map(e=>e.toString()), (i)=>bar.update(i))
-    bar.stop()
+    const data = await loadFromArray(slugs.map(e=>e.toString()), (i: number)=>bar.render(i))
 
     const csv = data.join('\n')
 
     if (outfile) {
-        await fs.writeFile(outfile, csv)
+        const encoder = new TextEncoder
+        await Deno.writeFile(outfile, encoder.encode(csv))
     }
     else {
         console.log(csv)
     }
 }
 
-yargs(process.argv.splice(2))
+yargs(Deno.args)
     .scriptName("jishocsv")
     .option("o", {
         alias: "out",
@@ -42,7 +40,7 @@ yargs(process.argv.splice(2))
                 default: [] as string[]
             }
         },
-        (argv)=>{
+        (argv: { slugs: string[]; o: any; })=>{
             GetWords(argv.slugs, argv.o as any)
         },    
     )
@@ -56,8 +54,8 @@ yargs(process.argv.splice(2))
                 required: true
             }
         },
-        async (argv)=>{
-            const file = await fs.readFile(argv.file)
+        async (argv: { file: string|URL; o: any; })=>{
+            const file = await Deno.readFile(argv.file)
             const filestring = file.toString()
             const wordMatches = filestring.matchAll(/(.+?)(?:[ ]|$)/gm) // Splits the words based on space
 
@@ -70,4 +68,4 @@ yargs(process.argv.splice(2))
     .demandCommand()
     .showHelpOnFail(true)
     .help()
-    .argv
+    .parse()

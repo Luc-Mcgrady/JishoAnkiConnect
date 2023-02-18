@@ -1,5 +1,4 @@
-import fetch from "node-fetch"
-import JishoResponse from "./types";
+import JishoResponse from "./types.ts";
 
 export default async function getSlugJson(slug: string) : Promise<JishoResponse> {
     const resp = await fetch(`https://jisho.org/api/v1/search/words?keyword=${slug}`)

@@ -1,5 +1,5 @@
-import { delay } from "../delay"
-import getSlugJson from "./slug"
+import { delay } from "../delay.ts"
+import getSlugJson from "./slug.ts"
 
 export async function getSlugCsv(slug: string) {
     try {
@@ -29,7 +29,7 @@ export async function loadFromArray(
     progress: (amt: number) => void = ()=>{}
 ) {
 
-    async function attempt(slug: string,max=2,_current=0) {
+    async function attempt(slug: string,max=2,_current=0) : Promise<string> {
         await delay(wait)
 
         const result = await getSlugCsv(slug)
@@ -42,6 +42,7 @@ export async function loadFromArray(
         }
         else {
             console.error(`${slug} Failed after ${_current} retrys`)
+            return "Error"
         }
     }
 
