@@ -1,4 +1,4 @@
-import yargs from 'https://deno.land/x/yargs/deno.ts'
+import yargs from "https://deno.land/x/yargs@v17.7.0-deno/deno.ts"
 import { loadFromArray } from "./jisho/tsv.ts"
 import { extractSlug } from "./jisho/slug.ts"
 import ProgressBar from "https://deno.land/x/progress@v1.3.6/mod.ts"
@@ -40,8 +40,8 @@ yargs(Deno.args)
                 default: [] as string[]
             }
         },
-        (argv: { slugs: string[]; o: any; })=>{
-            GetWords(argv.slugs, argv.o as any)
+        (argv: { slugs: string[]; o: string; })=>{
+            GetWords(argv.slugs, argv.o)
         },    
     )
     .command(
@@ -54,7 +54,7 @@ yargs(Deno.args)
                 required: true
             }
         },
-        async (argv: { file: string|URL; o: any; })=>{
+        async (argv: { file: string|URL; o: string })=>{
             const file = await Deno.readFile(argv.file)
             const filestring = file.toString()
             const wordMatches = filestring.matchAll(/(.+?)(?:[ ]|$)/gm) // Splits the words based on space
@@ -62,7 +62,7 @@ yargs(Deno.args)
             const words = [...wordMatches].map(a=>a[1])
             console.log({file, filestring, wordMatches, words})
 
-            GetWords(words, argv.o as any)
+            GetWords(words, argv.o)
         }
     )
     .demandCommand()

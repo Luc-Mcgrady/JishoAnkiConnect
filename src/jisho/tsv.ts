@@ -17,7 +17,7 @@ sense.english_definitions
 
         return `${main.slug}\t${main.japanese[0].reading}\t${senses}`
     }
-    catch (e) {
+    catch {
         return ""
     }
 }
@@ -45,7 +45,7 @@ export async function loadFromArray(
         }
     }
 
-    let resp = [] as string[]
+    const resp = [] as string[]
     let i = 0;
 	for (const slug of slugs) {
         resp.push(await attempt(slug))
