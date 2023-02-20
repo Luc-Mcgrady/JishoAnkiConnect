@@ -1,6 +1,6 @@
 import yargs from "https://deno.land/x/yargs@v17.7.0-deno/deno.ts"
-import { loadFromArray } from "./jisho/tsv.ts"
-import { extractSlug } from "./jisho/slug.ts"
+import { loadFromArray } from "./fetch/tsv.ts"
+import { extractSlug } from "./fetch/slug.ts"
 import ProgressBar from "https://deno.land/x/progress@v1.3.6/mod.ts"
 
 async function GetWords(slugs: string[], outfile: string) {
