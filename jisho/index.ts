@@ -1,7 +1,8 @@
 import yargs from "https://deno.land/x/yargs@v17.7.0-deno/deno.ts"
 import { loadFromArray } from "./fetch/tsv.ts"
-import { extractSlug } from "./fetch/slug.ts"
+import getSlugJson, { extractSlug } from "./fetch/slug.ts"
 import ProgressBar from "https://deno.land/x/progress@v1.3.6/mod.ts"
+import { addCardRequest } from "./ankiadd.ts";
 
 async function GetWords(slugs: string[], outfile: string) {
     slugs = slugs.map(extractSlug)
@@ -43,6 +44,20 @@ yargs(Deno.args)
         (argv: { slugs: string[]; o: string; })=>{
             GetWords(argv.slugs, argv.o)
         },    
+    )
+    .command(
+        "word <word>",
+        "Get and add a word to anki using ankiconnect",
+        {
+            slugs: {
+                alias: "word",
+                type: "string",
+                default: ""
+            }
+        },
+        ({word}: {word: string}) => {
+            const json = addCardRequest(word)
+        }
     )
     .command(
         "file <filename>",
