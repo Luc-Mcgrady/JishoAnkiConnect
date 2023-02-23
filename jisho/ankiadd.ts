@@ -1,4 +1,3 @@
-import getSlugJson from "./fetch/slug.ts";
 import { getSlugCsv } from "./fetch/tsv.ts";
 
 export const addCardRequest = async (slug: string) => {
