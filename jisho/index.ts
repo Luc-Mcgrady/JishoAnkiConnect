@@ -1,31 +1,30 @@
-import yargs, { describe } from "yargs"
-import { loadFromArray } from "./jisho/tsv"
-import { extractSlug } from "./jisho/slug"
-import fs from "fs/promises"
-import cliProgress from "cli-progress"
+import yargs from "yargs"
+import { loadFromArray } from "./fetch/tsv"
+import getSlugJson, { extractSlug } from "./fetch/slug"
+import ProgressBar from "https://deno.land/x/progress@v1.3.6/mod.ts"
+import { addCardRequest } from "./ankiadd";
 
 async function GetWords(slugs: string[], outfile: string) {
     slugs = slugs.map(extractSlug)
 
     console.log(slugs)
 
-    const bar = new cliProgress.Bar({}, cliProgress.Presets.shades_classic)
+    const bar = new ProgressBar({title: "fetched", total: slugs.length})
     
-    bar.start(slugs.length, 0)
-    const data = await loadFromArray(slugs.map(e=>e.toString()), (i)=>bar.update(i))
-    bar.stop()
+    const data = await loadFromArray(slugs.map(e=>e.toString()), (i: number)=>bar.render(i))
 
     const csv = data.join('\n')
 
     if (outfile) {
-        await fs.writeFile(outfile, csv)
+        const encoder = new TextEncoder
+        await Deno.writeFile(outfile, encoder.encode(csv))
     }
     else {
         console.log(csv)
     }
 }
 
-yargs(process.argv.splice(2))
+yargs(Deno.args)
     .scriptName("jishocsv")
     .option("o", {
         alias: "out",
@@ -42,9 +41,23 @@ yargs(process.argv.splice(2))
                 default: [] as string[]
             }
         },
-        (argv)=>{
-            GetWords(argv.slugs, argv.o as any)
+        (argv: { slugs: string[]; o: string; })=>{
+            GetWords(argv.slugs, argv.o)
         },    
+    )
+    .command(
+        "word <word>",
+        "Get and add a word to anki using ankiconnect",
+        {
+            slugs: {
+                alias: "word",
+                type: "string",
+                default: ""
+            }
+        },
+        ({word}: {word: string}) => {
+            const json = addCardRequest(word)
+        }
     )
     .command(
         "file <filename>",
@@ -56,18 +69,18 @@ yargs(process.argv.splice(2))
                 required: true
             }
         },
-        async (argv)=>{
-            const file = await fs.readFile(argv.file)
-            const filestring = file.toString()
+        async (argv: { file: string|URL; o: string })=>{
+            const file = await Deno.readFile(argv.file)
+            const filestring = new TextDecoder().decode(file)
             const wordMatches = filestring.matchAll(/(.+?)(?:[ ]|$)/gm) // Splits the words based on space
 
             const words = [...wordMatches].map(a=>a[1])
             console.log({file, filestring, wordMatches, words})
 
-            GetWords(words, argv.o as any)
+            GetWords(words, argv.o)
         }
     )
     .demandCommand()
     .showHelpOnFail(true)
     .help()
-    .argv
+    .parse()

@@ -1,4 +1,3 @@
-import fetch from "node-fetch"
 import JishoResponse from "./types";
 
 export default async function getSlugJson(slug: string) : Promise<JishoResponse> {

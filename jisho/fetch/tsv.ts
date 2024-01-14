@@ -17,7 +17,7 @@ sense.english_definitions
 
         return `${main.slug}\t${main.japanese[0].reading}\t${senses}`
     }
-    catch (e) {
+    catch {
         return ""
     }
 }
@@ -29,23 +29,23 @@ export async function loadFromArray(
     progress: (amt: number) => void = ()=>{}
 ) {
 
-    async function attempt(slug: string,max=2,_current=0) {
-        await delay(wait)
-
+    async function attempt(slug: string,max=2,_current=0) : Promise<string> {
         const result = await getSlugCsv(slug)
 
         if(result) {
             return result
         }
         else if (max > _current) { // Repeat until max repeats
+            await delay(wait)
             return await attempt(slug,max,_current+1) 
         }
         else {
             console.error(`${slug} Failed after ${_current} retrys`)
+            return "Error"
         }
     }
 
-    let resp = [] as string[]
+    const resp = [] as string[]
     let i = 0;
 	for (const slug of slugs) {
         resp.push(await attempt(slug))

@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@types/cli-progress": "^3.11.0",
-    "cli-progress": "^3.11.2",
     "fs": "^0.0.1-security",
     "node-fetch": "^2.6.6",
     "yargs": "^17.6.0"
