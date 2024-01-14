@@ -2,16 +2,16 @@ import esbuild from "esbuild"
 
 await esbuild.build({
     sourceRoot: "src",
-    entryPoint: "src/index.ts",
+    entryPoints: ["src/index.ts"],
     outfile: "dist/cli.js",
     bundle: true,
     platform: "node",
 })
 
-await esbuild.build({
+/*await esbuild.build({
     sourceRoot: "src",
-    entryPoint: "src/index.ts",
+    entryPoint: "src/stuff.ts",
     outfile: "dist/cli.js",
     bundle: true,
     platform: "commonjs",
-})
+})*/

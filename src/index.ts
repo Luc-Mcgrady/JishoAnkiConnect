@@ -1,30 +1,31 @@
 import yargs from "yargs"
 import { loadFromArray } from "./fetch/tsv"
 import getSlugJson, { extractSlug } from "./fetch/slug"
-import ProgressBar from "https://deno.land/x/progress@v1.3.6/mod.ts"
 import { addCardRequest } from "./ankiadd";
+import fs from "fs/promises"
+import Progress from "progress"
 
 async function GetWords(slugs: string[], outfile: string) {
     slugs = slugs.map(extractSlug)
 
     console.log(slugs)
 
-    const bar = new ProgressBar({title: "fetched", total: slugs.length})
+    const bar = new Progress(":bar", slugs.length)
     
-    const data = await loadFromArray(slugs.map(e=>e.toString()), (i: number)=>bar.render(i))
+    const data = await loadFromArray(slugs.map(e=>e.toString()), (i: number)=>bar.tick(i))
 
     const csv = data.join('\n')
 
     if (outfile) {
         const encoder = new TextEncoder
-        await Deno.writeFile(outfile, encoder.encode(csv))
+        await fs.writeFile(outfile, encoder.encode(csv))
     }
     else {
         console.log(csv)
     }
 }
 
-yargs(Deno.args)
+yargs(process.argv)
     .scriptName("jishocsv")
     .option("o", {
         alias: "out",
@@ -41,8 +42,8 @@ yargs(Deno.args)
                 default: [] as string[]
             }
         },
-        (argv: { slugs: string[]; o: string; })=>{
-            GetWords(argv.slugs, argv.o)
+        (argv)=>{
+            GetWords(argv.slugs, argv.o as string)
         },    
     )
     .command(
@@ -55,8 +56,8 @@ yargs(Deno.args)
                 default: ""
             }
         },
-        ({word}: {word: string}) => {
-            const json = addCardRequest(word)
+        ({word}) => {
+            const json = addCardRequest(word as string)
         }
     )
     .command(
@@ -69,15 +70,15 @@ yargs(Deno.args)
                 required: true
             }
         },
-        async (argv: { file: string|URL; o: string })=>{
-            const file = await Deno.readFile(argv.file)
+        async (argv)=>{
+            const file = await fs.readFile(argv.file)
             const filestring = new TextDecoder().decode(file)
             const wordMatches = filestring.matchAll(/(.+?)(?:[ ]|$)/gm) // Splits the words based on space
 
             const words = [...wordMatches].map(a=>a[1])
             console.log({file, filestring, wordMatches, words})
 
-            GetWords(words, argv.o)
+            GetWords(words, argv.o as string)
         }
     )
     .demandCommand()
