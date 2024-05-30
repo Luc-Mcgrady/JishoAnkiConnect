@@ -1,9 +1,13 @@
-import { getSlugCsv } from "./fetch/tsv.ts";
+import getSlugJson from "./fetch/slug.ts";
+import { formatSenses } from "./fetch/tsv.ts";
 
 export const addCardRequest = async (slug: string) => {
 
-    const tsv = await getSlugCsv(slug)
-    const [kanji, hirigana, meaning] = tsv.split("\t")
+    const resp = await getSlugJson(slug) // Todo pass this as argument rather than slug
+    const top = resp.data[0];
+    const kanji = top.japanese[0].word
+    const meaning = formatSenses(top)
+    const hirigana = top.japanese[0].reading; 
 
     return await fetch("http://127.0.0.1:8765",
     {
