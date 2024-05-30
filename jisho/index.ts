@@ -71,7 +71,7 @@ yargs(Deno.args)
         },
         async (argv: { file: string|URL; o: string })=>{
             const file = await Deno.readFile(argv.file)
-            const filestring = file.toString()
+            const filestring = new TextDecoder().decode(file)
             const wordMatches = filestring.matchAll(/(.+?)(?:[ ]|$)/gm) // Splits the words based on space
 
             const words = [...wordMatches].map(a=>a[1])
