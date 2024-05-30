@@ -9,6 +9,8 @@ export const addCardRequest = async (slug: string) => {
     const meaning = formatSenses(top)
     const hirigana = top.japanese[0].reading; 
 
+    const jlpt = top.jlpt.map(rank=>rank.replace("-", "::"))
+
     return await fetch("http://127.0.0.1:8765",
     {
         method: "post",
@@ -24,9 +26,7 @@ export const addCardRequest = async (slug: string) => {
                         "Hirigana": hirigana,
                         "Meaning": meaning
                     },
-                    "tags": [
-                    
-                    ],
+                    "tags": jlpt,
                     "picture": []
                 }
             }
