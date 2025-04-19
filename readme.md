@@ -1,3 +1,8 @@
+Paste the release found here into tampermonkey:
+https://github.com/Luc-Mcgrady/JishoAnkiConnect/releases
+
+![image](https://github.com/user-attachments/assets/9bbe5ee5-8854-4d62-a7df-40f5b6ca37a9)
+
 # Jisho Words
 Quickly get translations for every word in a list.
 Space or newline seperated.
