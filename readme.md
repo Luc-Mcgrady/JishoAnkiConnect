@@ -1,3 +1,5 @@
+Personal tool I use to grab translations from https://jisho.org/.
+
 Paste the release found here into tampermonkey:
 https://github.com/Luc-Mcgrady/JishoAnkiConnect/releases
 

@@ -1,5 +1,5 @@
 {
-  "name": "jishobookmarks",
+  "name": "jisho-anki-connect",
   "version": "1.0.0",
   "description": "",
   "main": "dist",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Luc-mcgrady/JishoBookmarks.git"
+    "url": "git+https://github.com/Luc-mcgrady/JishoAnkiConnect.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Luc Mcgrady",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Luc-mcgrady/JishoBookmarks/issues"
+    "url": "https://github.com/Luc-mcgrady/JishoAnkiConnect/issues"
   },
-  "homepage": "https://github.com/Luc-mcgrady/JishoBookmarks#readme",
+  "homepage": "https://github.com/Luc-mcgrady/JishoAnkiConnect#readme",
   "devDependencies": {
     "@types/node-fetch": "^2.6.2",
     "@types/progress": "^2.0.7",
