@@ -8,10 +8,21 @@ await esbuild.build({
     platform: "node",
 })
 
-/*await esbuild.build({
+await esbuild.build({
     sourceRoot: "src",
-    entryPoint: "src/stuff.ts",
-    outfile: "dist/cli.js",
+    entryPoints: ["src/userscript.ts"],
+    outfile: "dist/userscript.js",
     bundle: true,
-    platform: "commonjs",
-})*/
+    platform: "browser",
+    banner: {
+        js: `// ==UserScript==
+// @name         Jisho -> Anki
+// @namespace    http://tampermonkey.net/
+// @version      2024-01-14
+// @description  Add Jisho.org words to Anki from a button on the site using ankiconnect.
+// @author       Luc McGrady
+// @match        https://jisho.org/search/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=jisho.org
+// @grant        none
+// ==/UserScript=`}
+})
