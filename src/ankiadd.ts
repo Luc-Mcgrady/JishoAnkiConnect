@@ -1,7 +1,7 @@
 import getSlugJson from "./fetch/slug";
 import { getSlugCsv } from "./fetch/tsv";
 
-export const addCardRequest = async (slug: string) => {
+export const addCardRequest = async (slug: string, sentence: string | undefined = undefined) => {
 
     const tsv = await getSlugCsv(slug)
     const [kanji, hirigana, meaning] = tsv.split("\t")
@@ -19,7 +19,8 @@ export const addCardRequest = async (slug: string) => {
                     "fields": {
                         "Kanji": kanji,
                         "Hirigana": hirigana,
-                        "Meaning": meaning
+                        "Meaning": meaning,
+                        "Example-Sentence": sentence
                     },
                     "tags": [
                     

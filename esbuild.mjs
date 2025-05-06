@@ -24,5 +24,5 @@ await esbuild.build({
 // @match        https://jisho.org/search/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=jisho.org
 // @grant        none
-// ==/UserScript=`}
+// ==/UserScript==`}
 })
